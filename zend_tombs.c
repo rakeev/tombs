@@ -165,27 +165,6 @@ static void zend_tombs_activate(void) {
     if (!zend_tombs_started) {
         return;
     }
-
-    if (INI_INT("opcache.optimization_level")) {
-        zend_string *optimizer = zend_string_init(
-	        ZEND_STRL("opcache.optimization_level"), 1);
-        zend_long level = INI_INT("opcache.optimization_level");
-        zend_string *value;
-
-        /* disable pass 1 (pre-evaluate constant function calls) */
-        level &= ~(1<<0);
-
-        /* disable pass 4 (optimize function calls) */
-        level &= ~(1<<3);
-
-        value = zend_strpprintf(0, "0x%08X", (unsigned int) level);
-
-        zend_alter_ini_entry(optimizer, value,
-	        ZEND_INI_SYSTEM, ZEND_INI_STAGE_ACTIVATE);
-
-        zend_string_release(optimizer);
-        zend_string_release(value);
-    }
 }
 
 static void zend_tombs_setup(zend_op_array *ops) {
